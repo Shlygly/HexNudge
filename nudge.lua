@@ -1,7 +1,7 @@
 hexchat.register('HexNudge', '1.0', 'Wizz & Nudge for hexchat')
 
 NUDGE_SPEED = 60 -- Nudge speed interval
-NUDGE_COUNT = 41 -- Nudge count to end (must be n%2 == 1)
+NUDGE_COUNT = 31 -- Nudge count to end (must be n%2 == 1)
 
 Nudge_Index = 0
 
@@ -10,6 +10,7 @@ hexchat.hook_command('NUDGE', function (args)
 		hexchat.print("Utilisation : NUDGE <pseudo>")
 	else
 		hexchat.command('NOTICE '..args[2]..' WIZZ')
+		DoNudge()
 	end
 end)
 
@@ -18,6 +19,7 @@ hexchat.hook_command('WIZZ', function (args)
 		hexchat.print("Utilisation : WIZZ <pseudo>")
 	else
 		hexchat.command('NOTICE '..args[2]..' WIZZ')
+		DoNudge()
 	end
 end)
 
@@ -31,8 +33,14 @@ function DoNudge()
 	if (Nudge_Index <= 0) then
 		Nudge_Index = 0
 		hexchat.hook_timer(NUDGE_SPEED, function (args)
+			hexchat.command('GUI FOCUS')
 			hexchat.command('GUI FLASH')
-			hexchat.command('GUI MENU TOGGLE')
+			-- hexchat.command('GUI MENU TOGGLE')
+			if (Nudge_Index % 2 == 0) then
+				hexchat.command('GUI HIDE')
+			else
+				hexchat.command('GUI SHOW')
+			end
 			Nudge_Index = Nudge_Index + 1
 			if (Nudge_Index > NUDGE_COUNT) then
 				Nudge_Index = 0
