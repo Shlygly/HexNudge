@@ -11,6 +11,12 @@ Prefs =
 	hexnudge_nudge_speed = 60,
 	hexnudge_nudge_count = 15
 }
+PrefsMenu =
+{
+	hexnudge_muted="Activer - Désactiver les wizz",
+	hexnudge_menublink="Activer - Désactiver le clignotement du menu",
+	hexnudge_windowblink="Activer - Désactiver le clignotement de la fenêtre"
+}
 for key,value in pairs(Prefs) do
 	if (hexchat.pluginprefs[key] == nil) then
 		if (type(value) == "boolean") then
@@ -19,6 +25,12 @@ for key,value in pairs(Prefs) do
 			hexchat.pluginprefs[key] = value
 		end
 	end
+end
+hexchat.command('MENU DEL "Settings/HexNudge"')
+hexchat.command('MENU ADD "Settings/HexNudge"')
+for key,value in pairs(PrefsMenu) do
+	hexchat.command('MENU DEL "Settings/HexNudge/'..value..'" "WZREV '..key..'"')
+	hexchat.command('MENU ADD "Settings/HexNudge/'..value..'" "WZREV '..key..'"')
 end
 
 -- NUDGE & WIZZ Commands --
@@ -54,6 +66,20 @@ hexchat.hook_command('WZSET', function (args)
 		end
 	else
 		hexchat.print("Utilisation : WZSET [<variable> <valeur>]")
+	end
+end)
+
+hexchat.hook_command('WZREV', function (args)
+	if (#args == 2) then
+		if (hexchat.pluginprefs[args[2]] == nil) then
+			hexchat.print("Variable inconnu")
+		elseif (type(GetPref(args[2])) ~= "boolean") then
+			hexchat.print("Variable irreversible")
+		else
+			hexchat.pluginprefs[args[2]] = (GetPref(args[2]) and "OFF" or "ON")
+		end
+	else
+		hexchat.print("Utilisation : WZREV <variable>")
 	end
 end)
 
