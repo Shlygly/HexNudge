@@ -83,6 +83,12 @@ hexchat.hook_command('WZREV', function (args)
 	end
 end)
 
+-- NUDGE & WIZZ Button --
+hexchat.hook_print('Open Context', function (args)
+	hexchat.command('DELBUTTON "Wizz" WIZZ %s')
+	hexchat.command('ADDBUTTON "Wizz" WIZZ %s')
+end)
+
 -- NUDGE & WIZZ Reception --
 hexchat.hook_server('NOTICE', function (args, args_eol)
 	if (args_eol[4] == ':WIZZ') then
