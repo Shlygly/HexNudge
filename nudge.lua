@@ -1,8 +1,5 @@
 hexchat.register('HexNudge', '1.1', 'Wizz & Nudge for hexchat')
 
-NUDGE_SPEED = 60 -- Nudge speed interval
-NUDGE_COUNT = 31 -- Nudge count to end (must be n%2 == 1)
-
 Nudge_Index = 0
 
 -- Preferences init --
@@ -10,11 +7,17 @@ Prefs =
 {
 	hexnudge_muted=false,
 	hexnudge_menublink=true,
-	hexnudge_windowblink=false
+	hexnudge_windowblink=false,
+	hexnudge_nudge_speed = 60,
+	hexnudge_nudge_count = 15
 }
 for key,value in pairs(Prefs) do
 	if (hexchat.pluginprefs[key] == nil) then
-		hexchat.pluginprefs[key] = (value and "ON" or "OFF")
+		if (type(value) == "boolean") then
+			hexchat.pluginprefs[key] = (value and "ON" or "OFF")
+		else
+			hexchat.pluginprefs[key] = value
+		end
 	end
 end
 
@@ -65,7 +68,7 @@ end)
 function DoNudge()
 	if (not GetPref("hexnudge_muted") and Nudge_Index <= 0) then
 		Nudge_Index = 0
-		hexchat.hook_timer(NUDGE_SPEED, function (args)
+		hexchat.hook_timer(GetPref("hexnudge_nudge_speed"), function (args)
 			hexchat.command('GUI FOCUS')
 			hexchat.command('GUI FLASH')
 			if (GetPref("hexnudge_menublink")) then
@@ -79,7 +82,7 @@ function DoNudge()
 				end
 			end
 			Nudge_Index = Nudge_Index + 1
-			if (Nudge_Index > NUDGE_COUNT) then
+			if (Nudge_Index > GetPref("hexnudge_nudge_count") * 2 + 1) then
 				Nudge_Index = 0
 				return false;
 			end
