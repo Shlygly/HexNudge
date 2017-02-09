@@ -41,6 +41,7 @@ hexchat.hook_command('NUDGE', function (args)
 		hexchat.command('NOTICE '..args[2]..' WIZZ')
 		DoNudge()
 	end
+	return hexchat.EAT_ALL
 end)
 
 hexchat.hook_command('WIZZ', function (args)
@@ -50,6 +51,7 @@ hexchat.hook_command('WIZZ', function (args)
 		hexchat.command('NOTICE '..args[2]..' WIZZ')
 		DoNudge()
 	end
+	return hexchat.EAT_ALL
 end)
 
 -- Preferences Settings Command --
@@ -67,6 +69,7 @@ hexchat.hook_command('WZSET', function (args)
 	else
 		hexchat.print("Utilisation : WZSET [<variable> <valeur>]")
 	end
+	return hexchat.EAT_ALL
 end)
 
 hexchat.hook_command('WZREV', function (args)
@@ -81,6 +84,7 @@ hexchat.hook_command('WZREV', function (args)
 	else
 		hexchat.print("Utilisation : WZREV <variable>")
 	end
+	return hexchat.EAT_ALL
 end)
 
 -- NUDGE & WIZZ Button --
